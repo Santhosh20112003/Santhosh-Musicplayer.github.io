@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santhosh Musicplayer</title>
+    <link rel = "stylesheet" href = "style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class = "container">
+        <div class="album">
+        <h4 class="musicplayer">Music player</h4>
+        <img id = "track_image">
+        <p id = "title">title.mp3</p>
+        <input type="range" id="duration_slider" min = "0" max = "100" value="0" onclick="change_duration()">
+    </div>
+        <div class="controls">
+            <button  onclick="previous_song()" id="pre"><i class="fa fa-hand-point-left fa-3x"></i></button>
+        <button onclick="justplay()" id="play"><i class="fa-solid fa-play fa-3x"></i></button>
+        <button  onclick="next_song()" id="next"><i class="fa fa-hand-point-right fa-3x"></i></button>
+        </div>
+    </div>
+    
+
+    <script>
+     let previous = document.querySelector('#pre');
+     let play = document.querySelector('#play');
+     let next = document.querySelector('#next');
+     let title = document.querySelector('#title');
+     let artist = document.querySelector('#artist');
+     let slider = document.querySelector('#duration_slider');
+     let track_image = document.querySelector('#track_image');
+     
+     let timer;
+     let autoplay =1;
+
+     let index_no = 0;
+     let plaing_song = false;
+
+
+     let track = document.createElement('audio');
+
+     let All_song = [
+         {
+         name : "வெறித்தனம்",
+         path : "music/Verithanam.mp3",
+         img : "img/verithanam.jpg" ,
+         artist : "A.R.RAHUMAN"
+         },
+         {
+         name : "உனக்காக",
+         path : "music/Unakaga.mp3",
+         img : "img/Unakaga.jpg" ,
+         artist : "SREEKANTH HARIHARAN"
+         },
+         {
+         name : "சிங்கப்பெண்ணே",
+         path : "music/Singappenney.mp3",
+         img : "img/Singapenna.jpg" ,
+         artist : "SHASHAA TIRUPATI"
+        }
+    ];
+
+    function load_track(index_no){
+        clearInterval(timer);
+        reset_slider();
+
+        track.src = All_song[index_no].path;
+        title.innerHTML = All_song[index_no].name;
+        track_image.src = All_song[index_no].img;
+        artist.innerHTML = All_song[index_no].artist;
+
+        timer = setInterval(range_slider ,1000);
+        total.innerHTML = All_song.length;
+        present.innerHTML = index_no + 1;
+    }
+    load_track(index_no);
+    function justplay(){
+       if(plaing_song == false){
+           playsong();
+       }
+       else{
+           pausesong();
+       }
+    }
+
+    function reset_slider(){
+        slider.value = 0;
+    }
+
+    function playsong(){
+        track.play();
+        plaing_song = true;
+        play.innerHTML = '<i class = "fa fa-pause fa-3x"></i>'    
+    }
+
+    function pausesong(){
+        track.pause();
+        plaing_song = false;
+        play.innerHTML = '<i class = "fa fa-play fa-3x"></i>'    
+    }
+
+    function next_song(){
+        if(index_no< All_song.length -1){
+            index_no += 1;
+            load_track(index_no);
+            playsong();
+        }
+        else{
+            index_no = 0;
+            load_track(index_no);
+            playsong();
+
+        }
+    }
+
+    function previous_song(){
+        if(index_no > 0){
+            index_no -= 1;
+            load_track(index_no);
+            playsong();
+        }
+        else{
+            index_no = All_song.length;
+            load_track(index_no);
+            playsong();
+        }
+    }
+
+    function change_duration(){
+        slider_position = track.duration * (slider.value/100);
+        track.currentTime =slider_position;
+    }
+
+    </script>
+     
+</body>
+</html>
